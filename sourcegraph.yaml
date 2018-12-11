@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sourcegraph-server
+  annotations:
+    description: The single docker-image version of Sourcegraph. 
+  labels:
+    deploy: sourcegraph-server
+spec:
+  selector:
+    matchLabels:
+      app: sourcegraph-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sourcegraph-server
+    spec:
+      containers:
+      - name: sourcegraph-server
+        image: sourcegraph/server:insiders@sha256:6f10704ceed754b558e12295cbf7290ebddc0bcc61e1128280eadab58fc95f0a
+        env:
+        - name: SRC_LOG_LEVEL
+          value: dbug
+        ports:
+        - containerPort: 7080
+          name: http
+        - containerPort: 7443
+          name: https
+        resources:
+          requests:
+            cpu: "6"
+            memory: 30G
+          limits:
+            cpu: "12"
+            memory: 60G
+        volumeMounts:
+          - mountPath: /etc/sourcegraph
+            name: site-config
+          - mountPath: /var/opt/sourcegraph
+            name: data
+      volumes:
+        - name: site-config
+          persistentVolumeClaim:
+            claimName: site-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
