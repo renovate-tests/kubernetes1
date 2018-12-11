@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: sourcegraph-server
-        image: sourcegraph/server:insiders@sha256:c22494819a337718c649e7cf92ff3e4cee29071d3c4ce10b39f007d324c33d42
+        image: sourcegraph/server:insiders@sha256:2d9223dd04e584efb33d0dd7d6a46129f5edd3b85a71b2b0f6e0dac0ef937682
         env:
         - name: SRC_LOG_LEVEL
           value: dbug
